@@ -1,37 +1,42 @@
-from fastapi import FastAPI, BackgroundTasks, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
-from extract import *
-import os
 
-
-SECRET = os.getenv("SECRET")
-
-#
 app = FastAPI()
 
-class Msg(BaseModel):
-    msg: str
-    secret: str
+class User(BaseModel):
+    id: int
+    name: str
+    last_name: str
+    cedula: int
 
-@app.get("/")
+users_list = [User(id=1, name="Alejo", last_name="Quintero", cedula= 2112243),
+                User(id=2, name="Luis", last_name="Lopez", cedula= 1482634),
+                User(id=3, name="Carlos", last_name="rueda", cedula= 245365465)]
 
-async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
+@app.get("/usersjson")
+async def users():
+    return [{"name": "Alejo", "last_name": "Quintero", "cedula": 2112243},
+            {"name": "Luis", "last_name": "Lopez", "cedula": 1482634},
+            {"name": "Carlos", "last_name": "rueda", "cedula": 245365465}]
+
+@app.get("/users")
+async def users():
+    return users_list
+
+@app.get("/user/{id}")
+async def users(id: int):
+    return searchUser(id)
+
+@app.get("/userquery/")
+async def users(id: int):
+    return searchUser(id)
 
 
-@app.get("/homepage")
-async def demo_get():
-    driver=createDriver()
-
-    homepage = getGoogleHomepage(driver)
-    driver.close()
-    return homepage
-
-@app.post("/backgroundDemo")
-async def demo_post(inp: Msg, background_tasks: BackgroundTasks):
-    
-    background_tasks.add_task(doBackgroundTask, inp)
-    return {"message": "Success, background task started"}
-    
+def searchUser(id):
+    users = filter(lambda User: User.id == id, users_list)
+    try:
+        return list(users)[0]
+    except:
+        return {"error": "No se a podido encontrar dicho id"}
 
 
