@@ -6,12 +6,49 @@ root = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI()
 
+class Page(BaseModel):
+    Url: str
+
 
 @app.get("/")
-async def page():
+async def page(url: str):
     with open(os.path.join(root, 'page.html')) as fh:
         data = fh.read()
     return Response(content=data, media_type="text/html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class User(BaseModel):
