@@ -11,7 +11,7 @@ class User(BaseModel):
 
 users_list = [User(id=1, name="Alejo", last_name="Quintero", cedula= 2112243),
                 User(id=2, name="Luis", last_name="Lopez", cedula= 1482634),
-                User(id=3, name="Carlos", last_name="rueda", cedula= 245365465)]
+                User(id=3, name="Carlos", last_name="rueda", cedula= 1002684560)]
 
 @app.get("/usersjson")
 async def users():
