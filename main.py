@@ -12,7 +12,7 @@ class Page(BaseModel):
 
 
 @app.get("/")
-async def page(request: Request, name: str = Form(...)):
+async def page():
     with open(os.path.join(root, 'page.html')) as fh:
         data = fh.read()
     return Response(content=data, media_type="text/html")
