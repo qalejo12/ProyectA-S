@@ -1,7 +1,18 @@
-from fastapi import FastAPI
+import os.path
+
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
+root = os.path.dirname(os.path.abspath(__file__))
 
 app = FastAPI()
+
+
+@app.get("/")
+async def page():
+    with open(os.path.join(root, 'page.html')) as fh:
+        data = fh.read()
+        return Response(content=data, media_type="text/html")
+    return
 
 class User(BaseModel):
     id: int
