@@ -1,6 +1,7 @@
 import os.path
 
-from fastapi import FastAPI, Response
+from flask import Flask, render_template, request
+from fastapi import FastAPI, Response, Request, Form
 from pydantic import BaseModel
 root = os.path.dirname(os.path.abspath(__file__))
 
@@ -11,13 +12,16 @@ class Page(BaseModel):
 
 
 @app.get("/")
-async def page(url: str):
+async def page(request: Request, name: str = Form(...)):
     with open(os.path.join(root, 'page.html')) as fh:
         data = fh.read()
     return Response(content=data, media_type="text/html")
 
 
-
+@app.route('/submit', methods=['POST'])
+def submit():
+	name = request.form['url']
+	return 'El nombre ingresado es: {}'.format(name)
 
 
 
