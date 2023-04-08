@@ -11,8 +11,8 @@ app = FastAPI()
 async def page():
     with open(os.path.join(root, 'page.html')) as fh:
         data = fh.read()
-        return Response(content=data, media_type="text/html")
-    return
+    return Response(content=data, media_type="text/html")
+
 
 class User(BaseModel):
     id: int
