@@ -1,6 +1,4 @@
 import os.path
-
-from flask import Flask, render_template, request
 from fastapi import FastAPI, Response, Request, Form, status
 from pydantic import BaseModel
 from fastapi.responses import RedirectResponse
@@ -13,7 +11,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 
 root = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__)
 app = FastAPI()
 
 class Page(BaseModel):
