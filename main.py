@@ -32,7 +32,6 @@ async def add(request: Request, url: str = Form(...)):
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     driver.get(url)
-
     time.sleep(1)
     return RedirectResponse(url=app.url_path_for("page"),status_code=status.HTTP_303_SEE_OTHER)
 
