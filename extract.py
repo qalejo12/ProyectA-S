@@ -12,7 +12,7 @@ options.add_argument('--disable-extensions')
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-driver.get("https://fastapi-selenium-production-24c4.up.railway.app/")
+driver.get("")
 
 time.sleep(100)
 

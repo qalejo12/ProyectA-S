@@ -1,28 +1,55 @@
 import os.path
 
 from flask import Flask, render_template, request
-from fastapi import FastAPI, Response, Request, Form
+from fastapi import FastAPI, Response, Request, Form, status
 from pydantic import BaseModel
-root = os.path.dirname(os.path.abspath(__file__))
+from fastapi.responses import RedirectResponse
 
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+
+root = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__)
 app = FastAPI()
 
 class Page(BaseModel):
     Url: str
 
-
 @app.get("/")
 async def page():
-    with open(os.path.join(root, 'page.html')) as fh:
+    with open(os.path.join(root, 'index.html')) as fh:
         data = fh.read()
     return Response(content=data, media_type="text/html")
 
 
-@app.route('/submit', methods=['POST'])
-def submit():
-	name = request.form['url']
-	return 'El nombre ingresado es: {}'.format(name)
+@app.post('/submit')
+async def add(request: Request, url: str = Form(...)):
+    options = webdriver.ChromeOptions()
+    options.add_argument('--start-maximized')
+    options.add_argument('--disable-extensions')
 
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    driver.get(url)
+
+
+
+
+
+
+
+    time.sleep(1)
+    return RedirectResponse(url=app.url_path_for("page"),status_code=status.HTTP_303_SEE_OTHER)
+
+@app.post('/index')
+async def add():
+    with open(os.path.join(root, 'page.html')) as fh:
+        data = fh.read()
+    return Response(content=data, media_type="text/html")
 
 
 
@@ -90,5 +117,6 @@ def searchUser(id):
         return list(users)[0]
     except:
         return {"error": "No se a podido encontrar dicho id"}
+
 
 
